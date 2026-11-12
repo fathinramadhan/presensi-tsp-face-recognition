@@ -1,20 +1,24 @@
-# Face Recognition Attendance System
+# Face Recognition-Based Attendance System
 
-A web-based employee attendance system developed using Python, Flask, MySQL, and OpenCV. This application uses facial recognition technology to identify employees and record attendance automatically.
+A web-based employee attendance system developed as an academic research project for The Sounds Project (TSP). This project implements facial recognition technology using Python, Flask, MySQL, and OpenCV.
 
 ## Project Overview
 
-The Face Recognition Attendance System is designed to simplify employee attendance management through facial recognition. It uses the Local Binary Patterns Histograms (LBPH) algorithm from OpenCV to recognize registered employee faces.
+This project explores the implementation of facial recognition for employee attendance recording. It uses the **Local Binary Patterns Histograms (LBPH)** algorithm provided by OpenCV to recognize registered employee faces.
+
+The system was developed as a research and application prototype, not as a production system deployed at The Sounds Project.
 
 ## Features
 
-- **Face Registration** – Register employee facial data.
-- **Face Recognition** – Identify employees using facial recognition.
-- **Automatic Attendance** – Record employee attendance after successful face recognition.
-- **Employee Management** – Manage employee information.
-- **Attendance History** – View employee attendance records.
+- **Admin Login** – Authentication for accessing the application.
+- **Employee Management** – Add, view, edit, and delete employee data.
+- **Face Registration** – Capture employee facial images through a camera.
+- **Face Dataset Collection** – Collect up to 100 facial images for each employee.
+- **Face Recognition** – Identify registered employees using the LBPH algorithm.
+- **Attendance Recording** – Record employee check-in and check-out.
+- **Attendance History** – View recorded attendance data.
 - **Excel Export** – Export attendance reports into Excel files.
-- **Face Model Training** – Train the LBPH recognition model using employee face datasets.
+- **Face Model Training** – Train and save the LBPH recognition model.
 
 ## Application Screenshots
 
@@ -42,11 +46,11 @@ The Face Recognition Attendance System is designed to simplify employee attendan
 ### Face Training
 ![Face Training](screenshots/halaman%20training%20wajah.png)
 
-## Technologies
+## Technologies Used
 
 - Python
 - Flask
-- OpenCV (LBPH)
+- OpenCV (LBPH Face Recognition)
 - MySQL
 - NumPy
 - Pillow
@@ -59,6 +63,15 @@ The Face Recognition Attendance System is designed to simplify employee attendan
 presensi-tsp-face-recognition/
 ├── haarcascade/
 │   └── haarcascade_frontalface_default.xml
+├── screenshots/
+│   ├── halaman login.png
+│   ├── halaman dashboard.png
+│   ├── halaman data karyawan.png
+│   ├── halaman tambah karyawan.png
+│   ├── halaman edit karyawan.png
+│   ├── halaman presensi.png
+│   ├── halaman riwayat presensi.png
+│   └── halaman training wajah.png
 ├── static/
 │   └── images/
 ├── templates/
@@ -72,35 +85,47 @@ presensi-tsp-face-recognition/
 
 ## Installation and Setup
 
-**1. Clone the repository**
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/fathinramadhan/presensi-tsp-face-recognition.git
 ```
 
-**2. Open the project directory**
+### 2. Navigate to the Project Directory
 
 ```bash
 cd presensi-tsp-face-recognition
 ```
 
-**3. Install dependencies**
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**4. Configure MySQL**
+### 4. Configure MySQL
 
-Configure your MySQL database connection in `config.py` and prepare the required database and tables.
+Configure the MySQL connection in `config.py`. Prepare the `attendance_db` database and the required tables before running the application.
 
-**5. Run the application**
+### 5. Prepare the Face Dataset
+
+Register employee data and collect facial images through the application. The collected images are stored locally in the `dataset/` directory.
+
+### 6. Train the Face Recognition Model
+
+Run the face training process through the application. The generated LBPH model is saved locally at:
+
+```text
+trainer/trainer.yml
+```
+
+### 7. Run the Application
 
 ```bash
 python app.py
 ```
 
-**6. Open the application**
+### 8. Open the Application
 
 ```text
 http://127.0.0.1:5000
@@ -108,10 +133,11 @@ http://127.0.0.1:5000
 
 ## Notes
 
-- Employee face datasets are not included in this repository for privacy reasons.
-- The LBPH training model is generated locally through the training process.
+- This project is developed for academic research and demonstration purposes.
+- Employee facial datasets are not included in this repository to protect personal data.
+- The trained LBPH model is generated locally and is not included in the repository.
 - MySQL must be installed and configured before running the application.
-- This project is intended for local development and demonstration.
+- The application is intended for local development and testing.
 
 ## Author
 
