@@ -11,8 +11,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = "rahasia123"
-app.secret_key = "absensi_rahasia"
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
 
 
 UPLOAD_FOLDER = "static/uploads"
