@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambil Dataset Wajah</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .container {
+            background: white;
+            max-width: 650px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        video {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            background: black;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #mulai {
+            background: #198754;
+            color: white;
+        }
+
+        #batal {
+            background: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Pengambilan Dataset Wajah</h2>
+
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" hidden></canvas>
+
+    <h3 id="jumlah">Foto: 0/100</h3>
+    <p id="status">Menunggu kamera...</p>
+
+</div>
+
+<script>
+const idKaryawan = Number("{{ id }}");
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+
+let stream = null;
+let berjalan = false;
+let jumlahFoto = 0;
+
+window.addEventListener("load", mulaiKamera);
+async function mulaiKamera() {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+        });
+
+        video.srcObject = stream;
+        berjalan = true;
+
+        document.getElementById("status").innerText =
+            "Kamera aktif. Posisikan wajah di tengah.";
+
+        ambilFoto();
+
+    } catch (error) {
+        document.getElementById("status").innerText =
+            "Kamera tidak dapat diakses. Periksa izin kamera browser.";
+    }
+}
+
+async function ambilFoto() {
+    if (!berjalan || jumlahFoto >= 100) return;
+
+    if (video.videoWidth === 0) {
+        setTimeout(ambilFoto, 300);
+        return;
+    }
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+
+    const gambar = canvas.toDataURL("image/jpeg", 0.8);
+
+    try {
+        const response = await fetch(`/api/dataset/${idKaryawan}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                image: gambar
+            })
+        });
+
+        const hasil = await response.json();
+
+        jumlahFoto = hasil.count || jumlahFoto;
+
+        document.getElementById("jumlah").innerText =
+            `Foto: ${jumlahFoto}/100`;
+
+        document.getElementById("status").innerText =
+            hasil.message;
+
+        if (hasil.done) {
+    berhentiKamera();
+
+    document.getElementById("status").innerText =
+        "Dataset berhasil disimpan!";
+
+    setTimeout(() => {
+        window.location.href = "/karyawan";
+    }, 2000);
+
+    return;
+}
+
+    } catch (error) {
+        document.getElementById("status").innerText =
+            "Gagal mengirim gambar ke server.";
+    }
+
+    if (berjalan) {
+        setTimeout(ambilFoto, 300);
+    }
+}
+
+function berhentiKamera() {
+    berjalan = false;
+
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+}
+
+
+window.addEventListener("beforeunload", berhentiKamera);
+</script>
+
+</body>
+</html>

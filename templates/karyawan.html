@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Karyawan</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold mb-4">
+    Data Karyawan
+</h2>
+
+    <div>
+        <a href="/tambah_karyawan" class="btn btn-success">
+    <i class="bi bi-person-plus"></i>
+    Tambah Karyawan
+</a>
+
+        <a href="/dashboard" class="btn btn-secondary">
+    Kembali
+</a>
+    </div>
+</div>
+
+    <table class="table table-hover align-middle shadow-sm">
+        <thead class="table-dark">
+           <tr>
+    <th>No</th>
+    <th>Foto</th>
+    <th>Nama</th>
+    <th>Jabatan</th>
+    <th>Divisi</th>
+    <th>No HP</th>
+    <th>Email</th>
+    <th>Aksi</th>
+</tr>
+        </thead>
+
+        <tbody>
+
+        {% for row in data %}
+<tr>
+    <td>{{ loop.index }}</td>
+
+    <td>
+    {% if row.foto %}
+        <img src="{{ url_for('static', filename='uploads/' + row.foto) }}"
+             width="70"
+             height="70"
+             style="width:70px;height:70px;object-fit:cover;border-radius:8px;">
+    {% else %}
+        Tidak ada foto
+    {% endif %}
+</td>
+
+    <td>{{ row.nama }}</td>
+    <td>{{ row.jabatan }}</td>
+    <td>{{ row.divisi }}</td>
+    <td>{{ row.no_hp }}</td>
+    <td>{{ row.email }}</td>
+<td class="text-center">
+
+    <a href="/edit_karyawan/{{ row.id }}"
+    class="btn btn-warning btn-sm me-2">
+        Edit
+    </a>
+
+
+    <a href="/hapus_karyawan/{{ row.id }}"
+    onclick="return confirm('Yakin ingin menghapus data ini?')"
+    class="btn btn-danger btn-sm">
+        Hapus
+    </a>
+
+</td>
+</tr>
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

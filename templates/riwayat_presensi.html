@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Riwayat Presensi</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<style>
+
+body{
+    background:linear-gradient(135deg,#f4f6f9,#e9ecef);
+    min-height:100vh;
+}
+
+
+.container{
+
+    margin-top:50px;
+
+}
+
+
+.card-riwayat{
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+
+}
+
+
+/* Logo */
+
+.logo-box{
+
+    width:120px;
+    height:120px;
+
+    margin:auto;
+    margin-bottom:20px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+
+.logo{
+
+    width:120px;
+    height:auto;
+
+    object-fit:contain;
+
+}
+
+
+
+/* Judul */
+
+.title{
+
+    text-align:center;
+
+    font-weight:700;
+
+    color:#212529;
+
+    margin-bottom:20px;
+
+}
+
+
+
+/* Tombol */
+
+.btn-kembali{
+
+    display:inline-block;
+
+    margin:auto;
+
+    padding:10px 25px;
+
+    border-radius:10px;
+
+}
+
+
+/* Table */
+
+.table{
+
+    margin-top:30px;
+
+}
+
+
+.table th{
+
+    text-align:center;
+
+    vertical-align:middle;
+
+}
+
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+
+
+/* Status */
+
+.badge-hadir{
+
+    background:#198754;
+
+    color:white;
+
+    padding:7px 15px;
+
+    border-radius:20px;
+
+}
+
+
+.badge-belum{
+
+    background:#dc3545;
+
+    color:white;
+
+    padding:7px 15px;
+
+    border-radius:20px;
+
+}
+
+.badge-hadir,
+.badge-belum{
+
+    display:inline-block;
+
+    font-weight:600;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="card-riwayat">
+
+
+<!-- LOGO -->
+
+<div class="logo-box">
+
+<img src="/static/images/Logo_TheSoundsProject.png" class="logo">
+
+</div>
+
+
+
+<!-- JUDUL DI BAWAH LOGO -->
+
+<h2 class="title">
+Riwayat Presensi
+</h2>
+
+
+
+<div class="text-center">
+
+<div class="text-center">
+
+<a href="/export_excel" class="btn btn-success btn-kembali me-2">
+    Export Excel
+</a>
+
+
+<a href="/dashboard" class="btn btn-secondary btn-kembali">
+    Kembali
+</a>
+
+</div>
+
+</div>
+
+
+
+<hr>
+
+
+
+<table class="table table-bordered table-striped">
+
+
+<thead class="table-dark">
+
+
+<tr>
+
+<th>No</th>
+<th>Nama</th>
+<th>Jabatan</th>
+<th>Divisi</th>
+<th>Tanggal</th>
+<th>Jam Masuk</th>
+<th>Jam Pulang</th>
+<th>Status</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+{% for row in data %}
+
+<tr>
+
+
+<td class="text-center">
+{{ loop.index }}
+</td>
+
+
+<td>
+{{ row.nama }}
+</td>
+
+
+<td>
+{{ row.jabatan }}
+</td>
+
+
+<td>
+{{ row.divisi }}
+</td>
+
+
+<td>
+{{ row.tanggal }}
+</td>
+
+
+<td class="text-center">
+{{ row.jam_masuk }}
+</td>
+
+
+<td class="text-center">
+
+{{ row.jam_pulang if row.jam_pulang else "Belum Pulang" }}
+
+</td>
+
+
+<td class="text-center">
+
+
+{% if row.status == "Hadir" %}
+
+<span class="badge-hadir">
+{{ row.status }}
+</span>
+
+
+{% else %}
+
+<span class="badge-belum">
+{{ row.status }}
+</span>
+
+
+{% endif %}
+
+
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

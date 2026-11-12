@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamera Presensi</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .container {
+            background: white;
+            max-width: 650px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        video {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            background: black;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+        }
+
+        #mulai {
+            background: #198754;
+        }
+
+        #kembali {
+            background: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Presensi {{ jenis|capitalize }}</h2>
+
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" hidden></canvas>
+
+    <h3 id="status">Menunggu kamera...</h3>
+
+    <button id="mulai" onclick="mulaiKamera()" style="display:none;">Mulai Kamera</button>
+<button id="kembali" onclick="kembali()" style="display:none;">Kembali</button>
+
+</div>
+
+<script>
+const jenisPresensi = "{{ jenis }}";
+
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+
+let stream = null;
+let berjalan = false;
+let sedangMengirim = false;
+
+async function mulaiKamera() {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+        });
+
+        video.srcObject = stream;
+        berjalan = true;
+
+        document.getElementById("status").innerText =
+            "Kamera aktif. Posisikan wajah di depan kamera.";
+
+        prosesWajah();
+
+    } catch (error) {
+        document.getElementById("status").innerText =
+            "Kamera tidak dapat diakses. Periksa izin browser.";
+    }
+}
+
+async function prosesWajah() {
+    if (!berjalan || sedangMengirim) return;
+
+    if (video.videoWidth === 0) {
+        setTimeout(prosesWajah, 300);
+        return;
+    }
+
+    sedangMengirim = true;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    context.drawImage(video, 0, 0);
+
+    const gambar = canvas.toDataURL("image/jpeg", 0.8);
+
+    try {
+        const response = await fetch(`/api/presensi/${jenisPresensi}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                image: gambar
+            })
+        });
+
+        const hasil = await response.json();
+
+        document.getElementById("status").innerText =
+            hasil.message;
+
+        if (hasil.done) {
+    berhentiKamera();
+
+    document.getElementById("status").innerText =
+        hasil.message;
+
+    document.getElementById("mulai").style.display = "none";
+    document.getElementById("kembali").style.display = "none";
+
+    setTimeout(() => {
+        window.location.href = "/presensi";
+    }, 3000);
+
+    return;
+}
+
+    } catch (error) {
+        document.getElementById("status").innerText =
+            "Gagal menghubungi server.";
+    }
+
+    sedangMengirim = false;
+
+    if (berjalan) {
+        setTimeout(prosesWajah, 500);
+    }
+}
+
+function berhentiKamera() {
+    berjalan = false;
+
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+}
+
+function kembali() {
+    berhentiKamera();
+    window.location.href = "/presensi";
+}
+
+window.addEventListener("beforeunload", berhentiKamera);
+window.addEventListener("load", mulaiKamera);
+
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
