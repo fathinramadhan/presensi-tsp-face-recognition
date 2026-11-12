@@ -16,6 +16,32 @@ The Face Recognition Attendance System is designed to simplify employee attendan
 - **Excel Export** – Export attendance reports into Excel files.
 - **Face Model Training** – Train the LBPH recognition model using employee face datasets.
 
+## Application Screenshots
+
+### Login Page
+![Login Page](screenshots/halaman%20login.png)
+
+### Dashboard
+![Dashboard](screenshots/halaman%20dashboard.png)
+
+### Employee Data
+![Employee Data](screenshots/halaman%20data%20karyawan.png)
+
+### Add Employee
+![Add Employee](screenshots/halaman%20tambah%20karyawan.png)
+
+### Edit Employee
+![Edit Employee](screenshots/halaman%20edit%20karyawan.png)
+
+### Face Recognition Attendance
+![Attendance](screenshots/halaman%20presensi.png)
+
+### Attendance History
+![Attendance History](screenshots/halaman%20riwayat%20presensi.png)
+
+### Face Training
+![Face Training](screenshots/halaman%20training%20wajah.png)
+
 ## Technologies
 
 - Python
