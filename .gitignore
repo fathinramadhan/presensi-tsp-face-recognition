@@ -1,0 +1,31 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+
+# Dataset wajah karyawan
+dataset/
+
+# File backup dan database lokal
+backup/
+database/
+
+# File hasil export
+exports/
+*.xlsx
+*.xls
+
+# File sementara
+*.log
+.DS_Store
+Thumbs.db   
+
+# Model hasil training
+trainer/
