@@ -1,0 +1,6 @@
+Flask
+mysql-connector-python
+opencv-contrib-python
+numpy
+Pillow
+openpyxl
